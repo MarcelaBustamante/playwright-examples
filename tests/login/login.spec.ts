@@ -1,15 +1,19 @@
 import { test, expect} from '@playwright/test';
+import { LoginPage } from '../../lib/pages/login.page';
+
 
 test.describe('Login Page Tests', () => {
     test('Valid Login Test', async ({ page }) => {
-      const url = 'https://practicesoftwaretesting.com/auth/login/';
       const email = 'customer@practicesoftwaretesting.com';
       const password = 'welcome01';
 
-      await page.goto(url);
-      await page.getByPlaceholder('Your email').fill(email);
-      await page.getByPlaceholder('Your password').fill(password);
-      await page.getByRole('button', { name: 'Login' }).click();
+      const loginPage = new LoginPage(page);
+
+      await loginPage.goto();
+      // await loginPage.emailInput.fill(email);
+      // await loginPage.passwordInput.fill(password);
+      // await loginPage.loginButton.click();
+      await loginPage.login(email, password);
 
       await page.waitForLoadState('networkidle');
 
