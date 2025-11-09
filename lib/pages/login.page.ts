@@ -1,23 +1,24 @@
 import { type Locator, type Page } from "@playwright/test";
+import { CONFIG } from '../config';
 
 export class LoginPage {
-    readonly page:Page;
-    readonly emailInput:Locator;
-    readonly passwordInput:Locator;
-    readonly loginButton:Locator;
+    readonly page: Page;
+    readonly emailInput: Locator;
+    readonly passwordInput: Locator;
+    readonly loginButton: Locator;
 
-    
-
-    constructor(page:Page) {
+    constructor(page: Page) {
         this.page = page;
-        this.emailInput = page.locator('[data-test="email"]');
-        this.passwordInput = page.locator('[data-test="password"]');
+        this.emailInput = page.locator(CONFIG.selectors.login.emailInput);
+        this.passwordInput = page.locator(CONFIG.selectors.login.passwordInput);
         this.loginButton = page.getByRole('button', { name: 'Login' });
     }
     
-    async goto(){
-        const url = 'https://practicesoftwaretesting.com/auth/login/';
-        await this.page.goto(url);
+    async goto() {
+        await this.page.goto(CONFIG.loginUrl);
+        await this.page.waitForLoadState('networkidle', { 
+            timeout: CONFIG.timeouts.navigation 
+        });
     }
 
     async login(email:string, password:string){
